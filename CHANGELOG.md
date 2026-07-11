@@ -1,3 +1,12 @@
+## [1.19.1](https://github.com/CoCreate-app/CoCreate-observer/compare/v1.19.0...v1.19.1) (2026-07-11)
+
+
+### Bug Fixes
+
+* bump package versions ([e6cb96b](https://github.com/CoCreate-app/CoCreate-observer/commit/e6cb96b494f3ce2c08217c9c9ef1d260aa1da5d3))
+* removed post install and add add packages to apprved list ([0b6430b](https://github.com/CoCreate-app/CoCreate-observer/commit/0b6430b49334b6002c6b995180ee3a16e3904f3c))
+* semantic version handling ([ab9c43a](https://github.com/CoCreate-app/CoCreate-observer/commit/ab9c43abab748706585811d37b59b1234c4d185b))
+
 # [1.19.0](https://github.com/CoCreate-app/CoCreate-observer/compare/v1.18.4...v1.19.0) (2026-02-15)
 
 
