@@ -1,3 +1,10 @@
+# [1.20.0](https://github.com/CoCreate-app/CoCreate-observer/compare/v1.19.1...v1.20.0) (2026-07-17)
+
+
+### Features
+
+* update automated workflow and release configuration for improved semantic release handling ([5678e80](https://github.com/CoCreate-app/CoCreate-observer/commit/5678e800b27c8818254a4a826088db304d944f87))
+
 ## [1.19.1](https://github.com/CoCreate-app/CoCreate-observer/compare/v1.19.0...v1.19.1) (2026-07-11)
 
 
