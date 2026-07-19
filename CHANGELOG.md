@@ -1,3 +1,10 @@
+## [1.20.2](https://github.com/CoCreate-app/CoCreate-observer/compare/v1.20.1...v1.20.2) (2026-07-19)
+
+
+### Bug Fixes
+
+* set default branch to main ([363a2dd](https://github.com/CoCreate-app/CoCreate-observer/commit/363a2ddcbcf207b60efb26164ca04568191b262e))
+
 ## [1.20.1](https://github.com/CoCreate-app/CoCreate-observer/compare/v1.20.0...v1.20.1) (2026-07-17)
 
 
