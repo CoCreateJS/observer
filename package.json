@@ -36,11 +36,11 @@
   },
   "main": "./src/index.js",
   "dependencies": {
-    "@cocreate/utils": "^1.44.3",
+    "@cocreate/utils": "^1.50.0",
     "css-selector-parser": "^1.4.1"
   },
   "devDependencies": {
-    "@cocreate/webpack": "^1.6.2"
+    "@cocreate/webpack": "^1.7.0"
   },
   "allowScripts": {
     "@cocreate/utils@1.42.2": true,
