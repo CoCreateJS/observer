@@ -12,6 +12,9 @@ function observer(doc) {
     /** @type {number} Unique index counter for callback IDs. */
     this.index = 0;
 
+    /** @type {number} Unique index counter for native mutation records. */
+    this.mutationIndex = 0;
+
     /** @type {Map<string, object>} Map of configuration objects by their generated ID. */
     this.configs = new Map();
 
@@ -323,21 +326,35 @@ observer.prototype.processMutations = function (mutationsList) {
      * @param {string} type - The type of mutation (e.g., 'addedNodes').
      * @returns {object} The normalized mutation object.
      */
-    const createMutation = (node, mutation, type) => {
+    const createMutation = (node, mutation, type, mutationId) => {
         return {
+            mutationId: mutationId,
             type: type,
             target: node,
             mutationOrigin: mutation.target,
             parentElement: node.parentElement,
             previousSibling: node.previousSibling,
-            nextSibling: node.nextSibling
+            nextSibling: node.nextSibling,
+            attributeName: mutation.attributeName,
+            oldValue: mutation.oldValue,
+            addedNodes: mutation.addedNodes,
+            removedNodes: mutation.removedNodes
         };
     };
 
     for (const mutation of mutationsList) {
+        const mutationId = `mutation-${++this.mutationIndex}`;
+
         switch (mutation.type) {
             case "childList":
-                this.executeCallbacks(mutation);
+                this.executeCallbacks(
+                    createMutation(
+                        mutation.target,
+                        mutation,
+                        mutation.type,
+                        mutationId
+                    )
+                );
                 
                 // Handle Added Nodes
                 if (mutation.addedNodes.length > 0) {
@@ -346,7 +363,8 @@ observer.prototype.processMutations = function (mutationsList) {
                             let mutationObject = createMutation(
                                 addedNode,
                                 mutation,
-                                "addedNodes"
+                                "addedNodes",
+                                mutationId
                             );
 
                             let movedFrom = addedNode.movedFrom;
@@ -357,7 +375,12 @@ observer.prototype.processMutations = function (mutationsList) {
                             // Recursively check added node and its children
                             this.everyElement(addedNode, (el) => {
                                 this.executeCallbacks(
-                                    createMutation(el, mutation, "addedNodes")
+                                    createMutation(
+                                        el,
+                                        mutation,
+                                        "addedNodes",
+                                        mutationId
+                                    )
                                 );
                             });
                         }
@@ -377,7 +400,12 @@ observer.prototype.processMutations = function (mutationsList) {
                             // Recursively check removed node and its children
                             this.everyElement(removedNode, (el) => {
                                 this.executeCallbacks(
-                                    createMutation(el, mutation, "removedNodes")
+                                    createMutation(
+                                        el,
+                                        mutation,
+                                        "removedNodes",
+                                        mutationId
+                                    )
                                 );
                             });
                         }
@@ -385,12 +413,26 @@ observer.prototype.processMutations = function (mutationsList) {
                 }
                 break;
             case "attributes":
-                this.executeCallbacks(mutation);
+                this.executeCallbacks(
+                    createMutation(
+                        mutation.target,
+                        mutation,
+                        mutation.type,
+                        mutationId
+                    )
+                );
                 break;
 
             case "characterData":
                 if (mutation.target.isConnected) {
-                    this.executeCallbacks(mutation);
+                    this.executeCallbacks(
+                        createMutation(
+                            mutation.target,
+                            mutation,
+                            mutation.type,
+                            mutationId
+                        )
+                    );
                 }
                 break;
         }
