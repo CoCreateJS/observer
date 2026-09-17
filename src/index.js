@@ -342,6 +342,92 @@ observer.prototype.processMutations = function (mutationsList) {
         };
     };
 
+    /**
+     * Reconstructs a node's position within a child-list mutation. Native
+     * previous/next sibling values describe the mutation boundaries, so nodes
+     * inside a multi-node mutation use their adjacent mutation nodes.
+     */
+    const createPosition = (node, nodes, mutation) => {
+        const index = Array.prototype.indexOf.call(nodes, node);
+        return {
+            parentElement: mutation.target,
+            previousSibling:
+                index > 0 ? nodes[index - 1] : mutation.previousSibling,
+            nextSibling:
+                index > -1 && index < nodes.length - 1
+                    ? nodes[index + 1]
+                    : mutation.nextSibling
+        };
+    };
+
+    const removedMoves = new WeakMap();
+    const addedMoves = new WeakMap();
+    const pendingRemovals = new Map();
+
+    const setRecordMove = (recordMoves, mutation, node, move) => {
+        let moves = recordMoves.get(mutation);
+        if (!moves) {
+            moves = new Map();
+            recordMoves.set(mutation, moves);
+        }
+        moves.set(node, move);
+    };
+
+    const getRecordMove = (recordMoves, mutation, node) => {
+        return recordMoves.get(mutation)?.get(node);
+    };
+
+    // Pair only nodes removed and subsequently added in this native batch.
+    for (const mutation of mutationsList) {
+        if (mutation.type !== "childList") continue;
+
+        for (const removedNode of mutation.removedNodes) {
+            if (!(removedNode instanceof Element)) continue;
+
+            let removals = pendingRemovals.get(removedNode);
+            if (!removals) {
+                removals = [];
+                pendingRemovals.set(removedNode, removals);
+            }
+            removals.push({
+                mutation,
+                from: createPosition(
+                    removedNode,
+                    mutation.removedNodes,
+                    mutation
+                )
+            });
+        }
+
+        for (const addedNode of mutation.addedNodes) {
+            if (!(addedNode instanceof Element)) continue;
+
+            const removals = pendingRemovals.get(addedNode);
+            if (!removals?.length) continue;
+
+            const removal = removals.shift();
+            if (!removals.length) pendingRemovals.delete(addedNode);
+
+            const move = {
+                movedElement: addedNode,
+                from: removal.from,
+                to: createPosition(
+                    addedNode,
+                    mutation.addedNodes,
+                    mutation
+                )
+            };
+
+            setRecordMove(
+                removedMoves,
+                removal.mutation,
+                addedNode,
+                move
+            );
+            setRecordMove(addedMoves, mutation, addedNode, move);
+        }
+    }
+
     for (const mutation of mutationsList) {
         const mutationId = `mutation-${++this.mutationIndex}`;
 
@@ -360,28 +446,29 @@ observer.prototype.processMutations = function (mutationsList) {
                 if (mutation.addedNodes.length > 0) {
                     for (const addedNode of mutation.addedNodes) {
                         if (addedNode instanceof Element) {
-                            let mutationObject = createMutation(
-                                addedNode,
+                            const move = getRecordMove(
+                                addedMoves,
                                 mutation,
-                                "addedNodes",
-                                mutationId
+                                addedNode
                             );
 
-                            let movedFrom = addedNode.movedFrom;
-                            if (movedFrom) {
-                                delete addedNode.movedFrom;
-                                mutationObject.movedFrom = movedFrom;
-                            }
                             // Recursively check added node and its children
                             this.everyElement(addedNode, (el) => {
-                                this.executeCallbacks(
-                                    createMutation(
-                                        el,
-                                        mutation,
-                                        "addedNodes",
-                                        mutationId
-                                    )
+                                const mutationObject = createMutation(
+                                    el,
+                                    mutation,
+                                    "addedNodes",
+                                    mutationId
                                 );
+
+                                if (move) {
+                                    mutationObject.move = {
+                                        ...move,
+                                        isDescendant: el !== move.movedElement
+                                    };
+                                }
+
+                                this.executeCallbacks(mutationObject);
                             });
                         }
                     }
@@ -389,24 +476,31 @@ observer.prototype.processMutations = function (mutationsList) {
                 
                 // Handle Removed Nodes
                 if (mutation.removedNodes.length > 0) {
-                    let movedFrom = {
-                        parentElement: mutation.target,
-                        previousSibling: mutation.previousSibling,
-                        nextSibling: mutation.nextSibling
-                    };
                     for (const removedNode of mutation.removedNodes) {
                         if (removedNode instanceof Element) {
-                            removedNode.movedFrom = movedFrom;
+                            const move = getRecordMove(
+                                removedMoves,
+                                mutation,
+                                removedNode
+                            );
+
                             // Recursively check removed node and its children
                             this.everyElement(removedNode, (el) => {
-                                this.executeCallbacks(
-                                    createMutation(
-                                        el,
-                                        mutation,
-                                        "removedNodes",
-                                        mutationId
-                                    )
+                                const mutationObject = createMutation(
+                                    el,
+                                    mutation,
+                                    "removedNodes",
+                                    mutationId
                                 );
+
+                                if (move) {
+                                    mutationObject.move = {
+                                        ...move,
+                                        isDescendant: el !== move.movedElement
+                                    };
+                                }
+
+                                this.executeCallbacks(mutationObject);
                             });
                         }
                     }
