@@ -221,6 +221,11 @@ observer.prototype.parseSelector = function (config) {
                             attributeStrings[i].length - 1
                         );
                         attrName = attrName.replace(/\\(.)/g, '$1');
+                        const equality = attrName.match(/^([^=]+?)\s*=\s*(?:"([^"]*)"|'([^']*)'|(\S+))$/);
+                        if (equality) {
+                            const value = equality[2] ?? equality[3] ?? equality[4];
+                            attrName = `${equality[1].trim()}="${value}"`;
+                        }
                         parts.push({
                             type: "attribute",
                             name: attrName
