@@ -174,93 +174,34 @@ observer.prototype.init = function (config) {
  * @returns {void}
  */
 observer.prototype.parseSelector = function (config) {
-    let complexSelector = "";
-    let compoundSelectors = [];
+    const complexSelectors = [];
+    const compoundSelectors = [];
 
-    let selectorIncrement = 0;
-    // Split selector by comma, ignoring commas inside parentheses (e.g., :not(.a, .b))
-    const selectors = config.selector.split(/,(?![^(]*\))/g);
-    
-    for (let selector of selectors) {
-        selector = selector.trim();
-        const parts = [];
-
-        if (this.isComplexSelector(selector)) {
-            // Store for standard matches() handling if the selector is too complex
-            complexSelector += selector + ",";
-        } else {
-            // Parse compound selector (e.g., "div#id.class[attr]")
-            const regex = /^(\w+)?(#[\w-]+)?((?:\.[\w-]+)*)(\[[^\]]+\])?$/;
-            const match = regex.exec(selector);
-
-            if (!match) {
-                parts.push({ type: "tagName", name: selector });
-            } else {
-                if (match[1]) {
-                    parts.push({ type: "tagName", name: match[1] });
-                }
-
-                if (match[2]) {
-                    parts.push({ type: "id", name: match[2].substring(1) });
-                }
-
-                if (match[3]) {
-                    const classStrings = match[3].split(".");
-                    for (let i = 1; i < classStrings.length; i++) {
-                        parts.push({
-                            type: "class",
-                            name: classStrings[i]
-                        });
-                    }
-                }
-                if (match[4]) {
-                    const attributeStrings = match[4].split("[");
-                    for (let i = 1; i < attributeStrings.length; i++) {
-                        let attrName = attributeStrings[i].substring(
-                            0,
-                            attributeStrings[i].length - 1
-                        );
-                        attrName = attrName.replace(/\\(.)/g, '$1');
-                        const equality = attrName.match(/^([^=]+?)\s*=\s*(?:"([^"]*)"|'([^']*)'|(\S+))$/);
-                        if (equality) {
-                            const value = equality[2] ?? equality[3] ?? equality[4];
-                            attrName = `${equality[1].trim()}="${value}"`;
-                        }
-                        parts.push({
-                            type: "attribute",
-                            name: attrName
-                        });
-                    }
-                }
-            }
-            
-            // Create a unique ID for this specific compound part of the selector
-            const generatedId = `${selectorIncrement++}-${config.id}-${
-                parts.length
-            }`;
-
-            config.generatedIds.push(generatedId);
-            compoundSelectors.push({ generatedId, parts });
+    for (const selector of splitSelectorList(config.selector)) {
+        const parts = parseSimpleSelector(selector);
+        if (!parts) {
+            complexSelectors.push(selector);
+            continue;
         }
+
+        const generatedId = `${compoundSelectors.length}-${config.id}-${parts.length}`;
+        config.generatedIds.push(generatedId);
+        compoundSelectors.push({ generatedId, parts });
     }
 
-    // Distribute the parsed parts into the observer's look-up maps
     for (const observerType of config.types) {
-        let targetMap = this[observerType];
+        const targetMap = this[observerType];
 
-        if (complexSelector) {
-            const selectorString = complexSelector.slice(0, -1);
-            if (!targetMap.complexSelectors.has(selectorString)) {
-                targetMap.complexSelectors.set(selectorString, [config.id]);
+        for (const selector of complexSelectors) {
+            if (!targetMap.complexSelectors.has(selector)) {
+                targetMap.complexSelectors.set(selector, [config.id]);
             } else {
-                targetMap.complexSelectors.get(selectorString).push(config.id);
+                targetMap.complexSelectors.get(selector).push(config.id);
             }
         }
 
-        for (let compoundSelector of compoundSelectors) {
-            let generatedId = compoundSelector.generatedId;
-            let parts = compoundSelector.parts;
-            for (let part of parts) {
+        for (const { generatedId, parts } of compoundSelectors) {
+            for (const part of parts) {
                 if (!targetMap[part.type].has(part.name)) {
                     targetMap[part.type].set(part.name, [generatedId]);
                 } else {
@@ -271,48 +212,62 @@ observer.prototype.parseSelector = function (config) {
     }
 };
 
-/**
- * Checks if a selector contains combinators or pseudo-classes that require
- * complex handling (Element.matches) rather than simple optimization.
- *
- * @param {string} selector - The CSS selector string.
- * @returns {boolean} True if the selector is complex, false otherwise.
- */
-observer.prototype.isComplexSelector = function (selector) {
-    const combinedRegex = /[\s>~+:](?![^\[]*\])|\[[^\]]*[~|^$*]=/g;
-    return combinedRegex.test(selector);
-};
+function splitSelectorList(selector) {
+    const selectors = [];
+    let start = 0;
+    let brackets = 0;
+    let parentheses = 0;
+    let quote = "";
 
-/**
- * Helper function to clean and parse complex selectors, removing specific
- * pseudo-classes like :not and :has to find the core target.
- *
- * @param {string} selector - The complex selector string.
- * @returns {string} The simplified selector part.
- */
-function parseComplexSelector(selector) {
-    // Remove :not(...) and :has(...)
-    selector = selector
-        .replace(/:(not|has)\([^)]*\)/g, "")
-        .replaceAll(")", "")
-        .trim();
-
-    // Split the selector by spaces
-    const parts = selector.split(" ");
-
-    // Get the last part
-    let lastPart = parts.pop();
-
-    // Check if the last part contains a pseudo-class or pseudo-element
-    const colonIndex = lastPart.indexOf(":");
-
-    if (colonIndex === -1) {
-        // No pseudo-class/element, return the last part as is
-        return lastPart;
-    } else {
-        // Return the part before the first colon
-        return lastPart.substring(0, colonIndex) || "";
+    for (let i = 0; i < selector.length; i++) {
+        const char = selector[i];
+        if (char === "\\") {
+            i++;
+        } else if (quote) {
+            if (char === quote) quote = "";
+        } else if (char === "'" || char === '"') {
+            quote = char;
+        } else if (char === "[") {
+            brackets++;
+        } else if (char === "]") {
+            brackets--;
+        } else if (char === "(") {
+            parentheses++;
+        } else if (char === ")") {
+            parentheses--;
+        } else if (char === "," && !brackets && !parentheses) {
+            selectors.push(selector.slice(start, i).trim());
+            start = i + 1;
+        }
     }
+
+    selectors.push(selector.slice(start).trim());
+    return selectors;
+}
+
+function parseSimpleSelector(selector) {
+    const match = /^([a-zA-Z][\w-]*)?(#[\w-]+)?((?:\.[\w-]+)*)(\[[^\]]+\])?$/.exec(selector);
+    if (!match) return;
+
+    const parts = [];
+    if (match[1]) parts.push({ type: "tagName", name: match[1].toLowerCase() });
+    if (match[2]) parts.push({ type: "id", name: match[2].slice(1) });
+    if (match[3]) {
+        for (const name of match[3].slice(1).split(".")) {
+            parts.push({ type: "class", name });
+        }
+    }
+    if (match[4]) {
+        const attribute = /^([\w-]+)(?:\s*=\s*(?:"([^"\\]*)"|'([^'\\]*)'|([^\s"'\\=]+)))?$/.exec(match[4].slice(1, -1));
+        if (!attribute) return;
+        const value = attribute[2] ?? attribute[3] ?? attribute[4];
+        parts.push({
+            type: "attribute",
+            name: value === undefined ? attribute[1] : `${attribute[1]}="${value}"`
+        });
+    }
+
+    return parts.length ? parts : undefined;
 }
 
 /**
@@ -765,7 +720,7 @@ observer.prototype.removeObserver = function () {
                 } else {
                     for (const [key, value] of selectorMap.entries()) {
                         if (
-                            partType === "complexSelector" ||
+                            partType === "complexSelectors" ||
                             partType === "attributeFilter"
                         ) {
                             const index = value.indexOf(config.id);
