@@ -52,7 +52,7 @@ npm manifest:
     },
     "repository": {
       "type": "git",
-      "url": "git+https://gitlab.com/cocreatejs/CoCreate-observer.git"
+      "url": "git+https://github.com/cocreatejs/CoCreate-observer.git"
     },
     "author": "CoCreate LLC",
     "license": "MIT",

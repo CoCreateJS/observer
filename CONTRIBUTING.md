@@ -13,7 +13,7 @@ Fork the [project on Github](https://github.com/CoCreate-app/CoCreate-observer) 
 ```
 git observer https://github.com/contributor/CoCreate-observer.git
 cd CoCreate-observer
-git remote add upstream https://gitlab.com/cocreatejs/CoCreate-observer.git
+git remote add upstream https://github.com/cocreatejs/CoCreate-observer.git
 ```
 
 ## Create a Topic Branch
