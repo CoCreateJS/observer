@@ -57,9 +57,9 @@ npm manifest:
     "author": "CoCreate LLC",
     "license": "MIT",
     "bugs": {
-      "url": "https://github.com/CoCreate-app/CoCreate-observer/issues"
+      "url": "https://github.com/CoCreateJS/CoCreate-observer/issues"
     },
-    "homepage": "https://cocreate.app/docs/observer",
+    "homepage": "https://CoCreateJS.com/docs/observer",
     "funding": {
       "type": "GitHub Sponsors ❤",
       "url": "https://github.com/sponsors/CoCreate-app"

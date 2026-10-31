@@ -1,14 +1,14 @@
 # Contributing to CoCreate-observer
 
-This project is work of [many contributors](https://github.com/CoCreate-app/CoCreate-observer/graphs/contributors).
-You're encouraged to submit [pull requests](https://github.com/CoCreate-app/CoCreate-observer/pulls),
-[propose features and discuss issues](https://github.com/CoCreate-app/CoCreate-observer/issues).
+This project is work of [many contributors](https://github.com/CoCreateJS/CoCreate-observer/graphs/contributors).
+You're encouraged to submit [pull requests](https://github.com/CoCreateJS/CoCreate-observer/pulls),
+[propose features and discuss issues](https://github.com/CoCreateJS/CoCreate-observer/issues).
 
 In the examples below, substitute your Github username for `contributor` in URLs.
 
 ## Fork the Project
 
-Fork the [project on Github](https://github.com/CoCreate-app/CoCreate-observer) and check out your copy.
+Fork the [project on Github](https://github.com/CoCreateJS/CoCreate-observer) and check out your copy.
 
 ```
 git observer https://github.com/contributor/CoCreate-observer.git
@@ -75,7 +75,7 @@ git push origin my-feature-branch
 
 ## Make a Pull Request
 
-Go to [https://github.com/CoCreate-app/CoCreate-observer](https://github.com/CoCreate-app/CoCreate-observer) and select your feature branch.
+Go to [https://github.com/CoCreateJS/CoCreate-observer](https://github.com/CoCreateJS/CoCreate-observer) and select your feature branch.
 Click the 'Pull Request' button and fill out the form. Pull requests are usually reviewed within a few days.
 
 ## Rebase
