@@ -110,6 +110,8 @@ function observer(doc) {
  * @param {string} [config.selector] - The CSS selector to target elements.
  * @param {function} config.callback - The callback function to execute when mutations occur.
  * @returns {void}
+ * @public
+ * @environment client
  */
 observer.prototype.init = function (config) {
     if (!Array.isArray(config)) {
@@ -172,6 +174,8 @@ observer.prototype.init = function (config) {
  *
  * @param {object} config - The configuration object containing the selector string.
  * @returns {void}
+ * @public
+ * @environment client
  */
 observer.prototype.parseSelector = function (config) {
     const complexSelectors = [];
@@ -277,6 +281,8 @@ function parseSimpleSelector(selector) {
  *
  * @param {MutationRecord[]} mutationsList - Array of MutationRecords.
  * @returns {void}
+ * @public
+ * @environment client
  */
 observer.prototype.processMutations = function (mutationsList) {
     /**
@@ -285,7 +291,9 @@ observer.prototype.processMutations = function (mutationsList) {
      * @param {MutationRecord} mutation - The original mutation record.
      * @param {string} type - The type of mutation (e.g., 'addedNodes').
      * @returns {object} The normalized mutation object.
-     */
+ * @private
+ * @environment client
+ */
     const createMutation = (node, mutation, type, mutationId) => {
         return {
             mutationId: mutationId,
@@ -306,7 +314,9 @@ observer.prototype.processMutations = function (mutationsList) {
      * Reconstructs a node's position within a child-list mutation. Native
      * previous/next sibling values describe the mutation boundaries, so nodes
      * inside a multi-node mutation use their adjacent mutation nodes.
-     */
+ * @private
+ * @environment client
+ */
     const createPosition = (node, nodes, mutation) => {
         const index = Array.prototype.indexOf.call(nodes, node);
         return {
@@ -499,6 +509,8 @@ observer.prototype.processMutations = function (mutationsList) {
  * @param {Element} el - The root element to traverse.
  * @param {function} callback - The function to execute for each element.
  * @returns {void}
+ * @public
+ * @environment client
  */
 observer.prototype.everyElement = function everyElement(el, callback) {
     const stack = [el];
@@ -523,6 +535,8 @@ observer.prototype.everyElement = function everyElement(el, callback) {
  *
  * @param {object} mutation - The mutation object (normalized or native).
  * @returns {void}
+ * @public
+ * @environment client
  */
 observer.prototype.executeCallbacks = function (mutation) {
     try {
@@ -676,6 +690,8 @@ observer.prototype.executeCallbacks = function (mutation) {
  *
  * @param {string} name - The name of the observer configuration to remove.
  * @returns {void}
+ * @public
+ * @environment client
  */
 observer.prototype.uninit = function (name) {
     const config = this.configByName.get(name);
@@ -698,6 +714,8 @@ observer.prototype.uninit = function (name) {
  * Iterates through all maps (tagName, id, class, etc.) and splices out the removed IDs.
  *
  * @returns {void}
+ * @public
+ * @environment client
  */
 observer.prototype.removeObserver = function () {
     const namesToRemove = Array.from(this.unInintNames);
@@ -751,3 +769,10 @@ observer.prototype.removeObserver = function () {
 };
 
 export default new observer(document);
+
+/**
+ * Register a components init function & observe selector. The init function will be fired immedietly after detection of selector.
+ *
+ * @module observer
+ * @environment client
+ */

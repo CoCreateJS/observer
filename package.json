@@ -15,27 +15,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "cocreate": {
-    "environment": [
-      "client"
-    ],
-    "interface": {
-      "schemaVersion": 1,
-      "summary": "Register a components init function & observe selector. The init function will be fired immedietly after detection of selector.",
-      "source": "src/index.js",
-      "api": {
-        "exports": [
-          "init",
-          "parseSelector",
-          "processMutations",
-          "everyElement",
-          "executeCallbacks",
-          "uninit",
-          "removeObserver"
-        ]
-      }
-    }
-  },
   "scripts": {
     "start": "webpack --config webpack.config.js",
     "build": "webpack --mode=production --config webpack.config.js",
