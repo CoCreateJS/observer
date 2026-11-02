@@ -5,8 +5,8 @@ Register a components init function & observe selector. The init function will b
 ![minified](https://img.badgesize.io/https://cdn.CoCreateJS.com/observer/latest/CoCreate-observer.min.js?style=flat-square&label=minified&color=orange)
 ![gzip](https://img.badgesize.io/https://cdn.CoCreateJS.com/observer/latest/CoCreate-observer.min.js?compression=gzip&style=flat-square&label=gzip&color=yellow)
 ![brotli](https://img.badgesize.io/https://cdn.CoCreateJS.com/observer/latest/CoCreate-observer.min.js?compression=brotli&style=flat-square&label=brotli)
-![GitHub latest release](https://img.shields.io/github/v/release/CoCreate-app/CoCreate-observer?style=flat-square)
-![License](https://img.shields.io/github/license/CoCreate-app/CoCreate-observer?style=flat-square)
+![GitHub latest release](https://img.shields.io/github/v/release/CoCreateJS/observer?style=flat-square)
+![License](https://img.shields.io/github/license/CoCreateJS/observer?style=flat-square)
 ![Hiring](https://img.shields.io/static/v1?style=flat-square&label=&message=Hiring&color=blueviolet)
 
 ![CoCreate-observer](https://cdn.CoCreateJS.com/docs/CoCreate-observer.gif)
@@ -82,21 +82,21 @@ The `init` function takes a configuration object with the following key paramete
 
 # Announcements
 
-All updates to this library are documented in our [CHANGELOG](https://github.com/CoCreateJS/CoCreate-observer/blob/master/CHANGELOG.md) and [releases](https://github.com/CoCreateJS/CoCreate-observer/releases). You may also subscribe to email for releases and breaking changes.
+All updates to this library are documented in our [CHANGELOG](https://github.com/CoCreateJS/observer/blob/master/CHANGELOG.md) and [releases](https://github.com/CoCreateJS/observer/releases). You may also subscribe to email for releases and breaking changes.
 
 <a name="roadmap"></a>
 
 # Roadmap
 
-If you are interested in the future direction of this project, please take a look at our open [issues](https://github.com/CoCreateJS/CoCreate-observer/issues) and [pull requests](https://github.com/CoCreateJS/CoCreate-observer/pulls). We are currently focused on improving performance for large-scale applications and adding support for custom mutation types. We would love to hear your feedback.
+If you are interested in the future direction of this project, please take a look at our open [issues](https://github.com/CoCreateJS/observer/issues) and [pull requests](https://github.com/CoCreateJS/observer/pulls). We are currently focused on improving performance for large-scale applications and adding support for custom mutation types. We would love to hear your feedback.
 
 <a name="contribute"></a>
 
 # Contributing
 
-We welcome contributions of all kinds, including bug fixes, new features, documentation improvements, and performance optimizations. We encourage community contributions to our libraries (you might even score some nifty swag), please see our [CONTRIBUTING](https://github.com/CoCreateJS/CoCreate-observer/blob/master/CONTRIBUTING.md) guide for details.
+We welcome contributions of all kinds, including bug fixes, new features, documentation improvements, and performance optimizations. We encourage community contributions to our libraries (you might even score some nifty swag), please see our [CONTRIBUTING](https://github.com/CoCreateJS/observer/blob/master/CONTRIBUTING.md) guide for details.
 
-We want this library to be community-driven, and CoCreate led. We need your help to realize this goal. To help make sure we are building the right things in the right order, we ask that you create [issues](https://github.com/CoCreateJS/CoCreate-observer/issues) and [pull requests](https://github.com/CoCreateJS/CoCreate-observer/pulls) or merely upvote or comment on existing issues or pull requests.
+We want this library to be community-driven, and CoCreate led. We need your help to realize this goal. To help make sure we are building the right things in the right order, we ask that you create [issues](https://github.com/CoCreateJS/observer/issues) and [pull requests](https://github.com/CoCreateJS/observer/pulls) or merely upvote or comment on existing issues or pull requests.
 
 We appreciate your continued support, thank you!
 
@@ -125,7 +125,7 @@ CoCreate-observer is maintained and funded by CoCreate. The names and logos for 
 
 This software is dual-licensed under the GNU Affero General Public License version 3 (AGPLv3) and a commercial license.
 
--   **Open Source Use**: For open-source projects and non-commercial use, this software is available under the AGPLv3. The AGPLv3 allows you to freely use, modify, and distribute this software, provided that all modifications and derivative works are also licensed under the AGPLv3. For the full license text, see the [LICENSE file](https://github.com/CoCreateJS/CoCreate-observer/blob/master/LICENSE).
+-   **Open Source Use**: For open-source projects and non-commercial use, this software is available under the AGPLv3. The AGPLv3 allows you to freely use, modify, and distribute this software, provided that all modifications and derivative works are also licensed under the AGPLv3. For the full license text, see the [LICENSE file](https://github.com/CoCreateJS/observer/blob/master/LICENSE).
 
 -   **Commercial Use**: For-profit companies and individuals intending to use this software for commercial purposes must obtain a commercial license. The commercial license is available when you sign up for an API key on our [website](https://CoCreateJS.com). This license permits proprietary use and modification of the software without the copyleft requirements of the AGPLv3. It is ideal for integrating this software into proprietary commercial products and applications.
 
