@@ -1,3 +1,22 @@
+# [1.21.0](https://github.com/CoCreateJS/observer/compare/v1.20.2...v1.21.0) (2026-11-02)
+
+
+### Bug Fixes
+
+* add Deno specific entries to .gitignore ([9a6fbc1](https://github.com/CoCreateJS/observer/commit/9a6fbc1cafbfdebe4e84f34242a5a049e0d52e91))
+* bump [@cocreate](https://github.com/cocreate) dependencies ([3308d41](https://github.com/CoCreateJS/observer/commit/3308d415afd847ce277536e5bfc51f0285331eb5))
+* bump [@cocreate](https://github.com/cocreate) package versions ([a3ab305](https://github.com/CoCreateJS/observer/commit/a3ab30500790c14c0aa752e706a50d81e8d1d71c))
+* bump versions ([a631aae](https://github.com/CoCreateJS/observer/commit/a631aaec0ea241b7a9d231ff0d5215827af32114))
+* bump versions ([787df9d](https://github.com/CoCreateJS/observer/commit/787df9dfe989b3148ca3d96426c7fd925c3b7f98))
+* remove trailing slash from node_modules entry in .gitignore ([68e58d5](https://github.com/CoCreateJS/observer/commit/68e58d50c65a1c397a07c89dbf48ce657b459507))
+* update git url ([83ae6b1](https://github.com/CoCreateJS/observer/commit/83ae6b1974e1ffa51a525c5ca368d6eeaecd014e))
+* update GitHub Actions to use latest versions and sync package.json description ([2d7e425](https://github.com/CoCreateJS/observer/commit/2d7e4255cba53a189589cb69329b37e13835fba5))
+
+
+### Features
+
+* identify normalized mutations ([7c1f7c3](https://github.com/CoCreateJS/observer/commit/7c1f7c32796f0ff3eaff5d18b678f65f5520fc74))
+
 ## [1.20.2](https://github.com/CoCreateJS/CoCreate-observer/compare/v1.20.1...v1.20.2) (2026-07-19)
 
 
