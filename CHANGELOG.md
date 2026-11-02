@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/CoCreateJS/observer/compare/v1.21.0...v2.0.0) (2026-11-02)
+
+
+### chore
+
+* record package identity migration as breaking ([d91650c](https://github.com/CoCreateJS/observer/commit/d91650c1230707f9588e8e993c0c7f268f5a32f7))
+
+
+### BREAKING CHANGES
+
+* Consumers must install @cocreate/observer and use the renamed CoCreateJS repository identity; the previous package and repository identities are no longer supported.
+
 # [1.21.0](https://github.com/CoCreateJS/observer/compare/v1.20.2...v1.21.0) (2026-11-02)
 
 
