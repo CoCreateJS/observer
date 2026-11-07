@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/CoCreateJS/observer/compare/v2.0.1...v2.0.2) (2026-11-07)
+
+
+### Bug Fixes
+
+* bump CoCreate dependency versions ([92afbec](https://github.com/CoCreateJS/observer/commit/92afbece27f27e88eae1a864b20f24e4684e09bd))
+
 ## [2.0.1](https://github.com/CoCreateJS/observer/compare/v2.0.0...v2.0.1) (2026-11-05)
 
 
